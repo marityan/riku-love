@@ -20,9 +20,11 @@
         </div>
       </div>
       <div class="col-md-4 text-right">
-        <button @click="userSignin" class="btn btn-primary my-3">
-          ログイン
-        </button>
+        <router-link to="/timeline"
+          ><button @click="userSignin" class="btn btn-primary my-3">
+            ログイン
+          </button></router-link
+        >
       </div>
     </div>
   </div>
