@@ -5,6 +5,17 @@
       class="row d-flex flex-column align-items-center justify-content-center"
     >
       <div class="col-md-4">
+        <!-- ここからGoogle認証 -->
+        <button
+          @click="googleSignup"
+          class="btn btn-block bg-danger text-white my-3"
+        >
+          googleアカウントでログイン
+        </button>
+        <div>
+          <strong>or</strong>
+        </div>
+        <!-- ここまでGoogle認証 -->
         <div class="form-group text-left">
           <label for="email">メールアドレス：</label>
           <input type="text" class="form-control" id="email" v-model="email" />
@@ -31,12 +42,18 @@
       <div class="col-md-4 text-right">
         <button @click="userSignup" class="btn btn-primary my-3">登録</button>
       </div>
+      <!-- サインインへの遷移ボタン -->
+      <p>
+        アカウントをすでにお持ちの方
+        <router-link to="/signin">sign in now</router-link>
+      </p>
       <div class="col-md-4 text-center text-danger">
         {{ errorMessage }}
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import firebase from "firebase"
 export default {
@@ -67,6 +84,18 @@ export default {
           this.$router.push("/") //認証完了後のリダイレクト先を指定
         })
         .catch((e) => (this.errorMessage = e.message)) //エラーメッセージを格納
+    },
+    googleSignup() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(() => {
+          alert("Successfully Signed up!")
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
 }
