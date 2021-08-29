@@ -19,6 +19,24 @@ export default {
     }
   },
 
+  created: function() {
+    firebase
+      .firestore()
+      .collection("timelineData")
+      .get()
+      .then(
+        function(querySnapshot) {
+          querySnapshot.forEach(
+            function(doc) {
+              if (Number(doc.data().id) > Number(this.id_last)) {
+                this.id_last = doc.data().id
+              }
+            }.bind(this)
+          )
+        }.bind(this)
+      )
+  },
+
   methods: {
     toukou: function() {
       this.id_last = String(Number(this.id_last) + 1)
