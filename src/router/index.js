@@ -34,9 +34,9 @@ const routes = [
   },
   {
     path: "/comment",
-    name: "コメント",
+    name: "comment",
     component: () =>
-      import(/* webpackChunkName: "signin" */ "../views/comment.vue"),
+      import(/* webpackChunkName: "comment" */ "../views/comment.vue"),
   },
 ]
 
