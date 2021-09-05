@@ -4,9 +4,8 @@
       <h1 class="title">
         ESタイムライン
       </h1>
-
-      <div class="list">
-        <div class="item" v-for="(item, index) in this.esTimeline" :key="index">
+      <!-- <div class="list">
+        <div class="item" v-for="(item, index) in this.news" :key="index">
           <div>{{ index + item.text }}</div>
           <button v-on:click="commentFunction">コメントをする</button>
         </div>
@@ -22,7 +21,7 @@
         <span slot="no-more">-----検索結果は以上です-----</span>
         // 結果が存在しない場合下記が表示される
         <span slot="no-results">-----検索結果はありません-----</span>
-      </infinite-loading>
+      </infinite-loading> -->
       <!-- Twitter -->
       <!-- <div class="twitter__container">
         
@@ -34,7 +33,7 @@
 
       <div
         class="twitter__block"
-        v-for="(item, index) in this.esTimeline"
+        v-for="(item, index) in esTimeline"
         :key="index"
       >
         <figure>
@@ -42,14 +41,24 @@
         </figure>
         <div class="twitter__block-text">
           <div class="name">
-            名前<span class="name_reply"> @{{ item.userId }} </span>
+            {{ item.id }}<span class="name_reply"> @{{ item.userId }} </span>
           </div>
           <div class="date">1時間前</div>
-          <div class="text">
-            {{ item.text }}
+          <div class="paper">
+            <div class="lines">
+              <div class="text" contenteditable spellcheck="false">
+                {{ item.text }}
+              </div>
+            </div>
           </div>
           <div class="twitter__icon" for="com">
-            <button class="twitter-heart" id="com">コメントする</button>
+            <button
+              class="twitter-heart"
+              id="com"
+              v-on:click="commentFunction(item.id)"
+            >
+              コメントする
+            </button>
           </div>
         </div>
       </div>
@@ -61,11 +70,11 @@
 
 <script>
 import firebase from "firebase"
-import InfiniteLoading from "vue-infinite-loading"
+// import InfiniteLoading from "vue-infinite-loading"
 
 export default {
   components: {
-    InfiniteLoading,
+    // InfiniteLoading,
   },
   data() {
     return {
@@ -80,6 +89,7 @@ export default {
       .get()
       .then((snapshot) => {
         snapshot.docs.forEach((doc) => {
+          console.log(doc)
           this.esTimeline.push({
             id: doc.id,
             ...doc.data(),
@@ -93,14 +103,17 @@ export default {
      * 自動実行されるmethod
      */
     infiniteLoad() {
-      // itemの生成
-      this.news = this.esTimeline
+      for (let i = 0; i < 20; i++) {
+        this.news.push(this.esTimeline[i])
+      }
       this.$refs.infiniteLoading.stateChanger.loaded()
-      if (this.news.length == this.esTimeline.length) {
+      if (this.news.length == 30) {
         this.$refs.infiniteLoading.stateChanger.complete()
       }
     },
-    commentFunction() {},
+    commentFunction(id) {
+      this.router.push({ path: `/comment/${id}` })
+    },
   },
 }
 </script>
@@ -216,7 +229,7 @@ export default {
   color: #8a9aa4;
 }
 /* 本文 */
-.twitter__block-text .text {
+.twitter__block-text {
   margin: 5px 0;
 }
 /* 画像を貼る場合 */
@@ -244,4 +257,67 @@ export default {
   color: #8a9aa4;
   border: 0px;
 }
+
+/* @import url(https://fonts.googleapis.com/css?family=Indie+Flower); */
+body {
+  margin: 0;
+  padding: 0;
+  background: lightgoldenrodyellow;
+}
+.paper {
+  height: 550px;
+  width: 450px;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 45px 25px;
+  left: 50%;
+  top: 50%;
+  box-shadow: 0px 0px 5px 0px #888;
+}
+/* .paper::before {
+  content: "";
+  position: absolute;
+  left: 45px;
+  height: 100%;
+  width: 2px;
+  background: rgba(255, 0, 0, 0.4);
+} */
+.lines {
+  margin-top: 45px;
+  height: calc(100% - 35px);
+  width: 100%;
+  background-image: repeating-linear-gradient(
+    white 0px,
+    white 24px,
+    steelblue 25px
+  );
+}
+.text {
+  position: absolute;
+  top: 80px;
+  left: 55px;
+  bottom: 30px;
+  right: 30px;
+  line-height: 25px;
+  font-family: "Indie Flower";
+  overflow: hidden;
+  outline: none;
+}
+/* .holes {
+
+  left: 10px;
+  height: 25px;
+  width: 25px;
+  background: lightgoldenrodyellow;
+  border-radius: 50%;
+  box-shadow: inset 0px 0px 2px 0px #888;
+}
+.hole-top {
+  top: 10%;
+}
+.hole-middle {
+  top: 50%;
+}
+.hole-bottom {
+  bottom: 1000%;
+} */
 </style>

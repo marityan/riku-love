@@ -47,7 +47,6 @@ export default {
             .firestore()
             .collection("timelineData")
             .add({
-              id: this.id_last,
               userId: user.uid,
               text: this.text,
               wordLength: this.text.length,

@@ -7,6 +7,8 @@
     <div><router-link to="timeline">TimeLine</router-link></div>
     |
     <div><router-link to="scroll">Scroll</router-link></div>
+    |
+    <div><router-link to="comment">Comment</router-link></div>
     <router-view />
   </div>
 </template>
