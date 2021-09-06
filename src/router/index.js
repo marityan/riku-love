@@ -50,6 +50,11 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "scroll" */ "../views/scroll.vue"),
   },
+  {
+    path: "/chat",
+    name: "chat",
+    component: () => import(/* webpackChunkName: "chat" */ "../views/chat.vue"),
+  },
 ]
 
 const router = new VueRouter({

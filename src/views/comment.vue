@@ -1,27 +1,32 @@
 <template>
   <div class="container" id="app" v-cloak>
-    <div v-if="length">
+    <!-- <div v-if="length">
       <h2>評価点： {{ averageScore }}</h2>
+    </div> -->
+    <div class="twitter__block">
+      <figure>
+        <img src="" />
+      </figure>
     </div>
     <form v-on:submit.prevent>
       <input type="textarea" v-model="comment" />
-      <select v-model="rate">
+      <!-- <select v-model="rate">
         <option value="0">☆☆☆☆☆</option>
         <option value="1">★☆☆☆☆</option>
         <option value="2">★★☆☆☆</option>
         <option value="3">★★★☆☆</option>
         <option value="4">★★★★☆</option>
         <option value="5">★★★★★</option>
-      </select>
+      </select> -->
       <button v-on:click="submit">送信</button>
-      <button v-on:click="sort">⬇︎</button>
-      <button v-on:click="sortUp">⬆︎</button>
+      <!-- <button v-on:click="sort">⬇︎</button>
+      <button v-on:click="sortUp">⬆︎</button> -->
     </form>
     <div v-for="(comment, index) in comments" :key="comment.tokuten">
       <ul>
-        <li>
+        <!-- <li>
           満足度 : <span>{{ "★".repeat(comment.rate) }}</span>
-        </li>
+        </li> -->
         <p>
           コメント : <span>{{ comment.comment }}</span>
         </p>
@@ -32,7 +37,7 @@
 </template>
 
 <script>
-// import firebase from "firebase"
+import firebase from "firebase"
 export default {
   data: function() {
     return {
@@ -58,6 +63,12 @@ export default {
       if (this.comments.length > 0) {
         this.length = true
       }
+      firebase
+        .firestore()
+        .collection("timelineData")
+        .doc("1kskIjFn7MvF5mTWh2Jb")
+        .collection("comment")
+        .add({ comment: "" })
     },
     deleteItem: function(index) {
       this.sun = this.sun - Number(this.comments[index].rate)
@@ -92,3 +103,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* .container {
+  background-color: palegreen;
+} */
+</style>
