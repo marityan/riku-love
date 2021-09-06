@@ -1,9 +1,18 @@
 <template>
   <section class="container">
     <div>
+      <figure>
+        <img src="../images/icon.png" />
+      </figure>
       <h1 class="title">
         ESタイムライン
       </h1>
+      <div>
+        <b-card>
+          <textarea id="ESContent" v-model="text" />
+          <button v-on:click="toukou">投稿</button>
+        </b-card>
+      </div>
       <!-- <div class="list">
         <div class="item" v-for="(item, index) in this.news" :key="index">
           <div>{{ index + item.text }}</div>
@@ -80,6 +89,8 @@ export default {
     return {
       esTimeline: [],
       news: [],
+      text: "",
+      id_last: "0",
     }
   },
   created() {
@@ -96,7 +107,23 @@ export default {
           })
         })
       })
+    firebase
+      .firestore()
+      .collection("timelineData")
+      .get()
+      .then(
+        function(querySnapshot) {
+          querySnapshot.forEach(
+            function(doc) {
+              if (Number(doc.data().id) > Number(this.id_last)) {
+                this.id_last = doc.data().id
+              }
+            }.bind(this)
+          )
+        }.bind(this)
+      )
   },
+
   methods: {
     /*
      * infiniteLoad
@@ -113,6 +140,28 @@ export default {
     },
     commentFunction(id) {
       this.router.push({ path: `/comment/${id}` })
+    },
+    toukou: function() {
+      this.id_last = String(Number(this.id_last) + 1)
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          firebase
+            .firestore()
+            .collection("timelineData")
+            .add({
+              userId: user.uid,
+              text: this.text,
+              wordLength: this.text.length,
+            })
+          alert("投稿完了")
+          this.text = ""
+        } else {
+          // User is signed out
+          alert("投稿することができません。")
+          console.log("Error")
+        }
+      })
     },
   },
 }
@@ -320,4 +369,12 @@ body {
 .hole-bottom {
   bottom: 1000%;
 } */
+.ma {
+  background-color: palegreen;
+  width: 100%;
+}
+.container {
+  margin: 0;
+  padding: 0;
+}
 </style>

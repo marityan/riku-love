@@ -1,27 +1,13 @@
 <template>
   <div class="container" id="app" v-cloak>
-    <!-- <div v-if="length">
-      <h2>評価点： {{ averageScore }}</h2>
-    </div> -->
     <form v-on:submit.prevent>
       <input type="textarea" v-model="comment" />
-      <!-- <select v-model="rate">
-        <option value="0">☆☆☆☆☆</option>
-        <option value="1">★☆☆☆☆</option>
-        <option value="2">★★☆☆☆</option>
-        <option value="3">★★★☆☆</option>
-        <option value="4">★★★★☆</option>
-        <option value="5">★★★★★</option>
-      </select> -->
       <button v-on:click="submit">送信</button>
       <button v-on:click="sort">⬇︎</button>
       <button v-on:click="sortUp">⬆︎</button>
     </form>
     <div v-for="(comment, index) in comments" :key="comment.tokuten">
       <ul>
-        <!-- <li>
-          満足度 : <span>{{ "★".repeat(comment.rate) }}</span>
-        </li> -->
         <p>
           コメント : <span>{{ comment.comment }}</span>
         </p>
