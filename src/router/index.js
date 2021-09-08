@@ -33,16 +33,23 @@ const routes = [
       import(/* webpackChunkName: "signin" */ "../views/Signin.vue"),
   },
   {
-    path: "/timeline",
-    name: "timeline",
-    component: () =>
-      import(/* webpackChunkName: "timeline" */ "../views/timeline.vue"),
-  },
-  {
     path: "/scroll",
     name: "scroll",
     component: () =>
       import(/* webpackChunkName: "scroll" */ "../views/scroll.vue"),
+  },
+  {
+    path: "/comment/:docId",
+    name: "comment",
+    props: true,
+    component: () =>
+      import(/* webpackChunkName: "scroll" */ "../views/comment.vue"),
+  },
+  {
+    path: "/sample",
+    name: "sample",
+    component: () =>
+      import(/* webpackChunkName: "scroll" */ "../views/sample.vue"),
   },
 ]
 
