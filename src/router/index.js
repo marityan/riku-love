@@ -39,10 +39,17 @@ const routes = [
       import(/* webpackChunkName: "scroll" */ "../views/scroll.vue"),
   },
   {
-    path: "/comment",
+    path: "/comment/:docId",
     name: "comment",
+    props: true,
     component: () =>
       import(/* webpackChunkName: "scroll" */ "../views/comment.vue"),
+  },
+  {
+    path: "/sample",
+    name: "sample",
+    component: () =>
+      import(/* webpackChunkName: "scroll" */ "../views/sample.vue"),
   },
 ]
 

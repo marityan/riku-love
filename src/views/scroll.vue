@@ -1,17 +1,18 @@
 <template>
   <section class="container">
     <div>
-      <figure>
-        <img src="../images/icon.png" />
-      </figure>
-      <h1 class="title">
-        ESタイムライン
-      </h1>
-      <div>
-        <b-card>
-          <textarea id="ESContent" v-model="text" />
-          <button v-on:click="toukou">投稿</button>
-        </b-card>
+      <div class="title">
+        <h2>
+          ホーム
+        </h2>
+      </div>
+      <div class="send">
+        <textarea class="toukouInput" id="ESContent" v-model="text">
+ESを記入</textarea
+        >
+        <button class="btn btn--orange btn--radius" v-on:click="toukou">
+          投稿する
+        </button>
       </div>
       <!-- <div class="list">
         <div class="item" v-for="(item, index) in this.news" :key="index">
@@ -31,26 +32,16 @@
         // 結果が存在しない場合下記が表示される
         <span slot="no-results">-----検索結果はありません-----</span>
       </infinite-loading> -->
-      <!-- Twitter -->
-      <!-- <div class="twitter__container">
-        
-        <div class="twitter__title">
-          <span class="twitter-logo"></span>
-        </div>
-        
-        <div class="twitter__contents"> -->
 
-      <div
-        class="twitter__block"
-        v-for="(item, index) in esTimeline"
-        :key="index"
-      >
+      <!-- Twitter -->
+
+      <div class="twitter__block" v-for="item in esTimeline" :key="item.id">
         <figure>
           <img src="../images/icon.png" />
         </figure>
         <div class="twitter__block-text">
           <div class="name">
-            {{ item.id }}<span class="name_reply"> @{{ item.userId }} </span>
+            <span class="name_reply"> @{{ item.userId }} </span>
           </div>
           <div class="date">1時間前</div>
           <div class="paper">
@@ -61,18 +52,14 @@
             </div>
           </div>
           <div class="twitter__icon" for="com">
-            <button
-              class="twitter-heart"
-              id="com"
-              v-on:click="commentFunction(item.id)"
-            >
-              コメントする
-            </button>
+            <router-link :to="{ name: 'comment', params: { docId: item.id } }">
+              <button class="twitter-heart" id="com">
+                コメントする
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
-      <!-- 
-      </div> -->
     </div>
   </section>
 </template>
@@ -87,41 +74,29 @@ export default {
   },
   data() {
     return {
+      subscribe: null,
       esTimeline: [],
-      news: [],
+      // news: [],
       text: "",
-      id_last: "0",
+      // id_last: "0",
     }
   },
   created() {
-    firebase
+    const ref = firebase
       .firestore()
       .collection("timelineData")
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          console.log(doc)
-          this.esTimeline.push({
-            id: doc.id,
-            ...doc.data(),
-          })
+      .orderBy("createdAt", "desc")
+
+    this.subscribe = ref.onSnapshot((snapshot) => {
+      let esTimeline = []
+      snapshot.forEach((doc) => {
+        esTimeline.push({
+          id: doc.id,
+          ...doc.data(),
         })
       })
-    firebase
-      .firestore()
-      .collection("timelineData")
-      .get()
-      .then(
-        function(querySnapshot) {
-          querySnapshot.forEach(
-            function(doc) {
-              if (Number(doc.data().id) > Number(this.id_last)) {
-                this.id_last = doc.data().id
-              }
-            }.bind(this)
-          )
-        }.bind(this)
-      )
+      this.esTimeline = esTimeline
+    })
   },
 
   methods: {
@@ -129,21 +104,16 @@ export default {
      * infiniteLoad
      * 自動実行されるmethod
      */
-    infiniteLoad() {
-      for (let i = 0; i < 20; i++) {
-        this.news.push(this.esTimeline[i])
-      }
-      this.$refs.infiniteLoading.stateChanger.loaded()
-      if (this.news.length == 30) {
-        this.$refs.infiniteLoading.stateChanger.complete()
-      }
-    },
-    commentFunction(id) {
-      this.router.push({ path: `/comment/${id}` })
-    },
+    // infiniteLoad() {
+    //   for (let i = 0; i < 20; i++) {
+    //     this.news.push(this.esTimeline[i])
+    //   }
+    //   this.$refs.infiniteLoading.stateChanger.loaded()
+    //   if (this.news.length == 30) {
+    //     this.$refs.infiniteLoading.stateChanger.complete()
+    //   }
+    // },
     toukou: function() {
-      this.id_last = String(Number(this.id_last) + 1)
-
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           firebase
@@ -153,6 +123,7 @@ export default {
               userId: user.uid,
               text: this.text,
               wordLength: this.text.length,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             })
           alert("投稿完了")
           this.text = ""
@@ -182,19 +153,19 @@ export default {
   position: relative;
 }
 
-/* .twitter__container {
-  padding: 0;
-  background: #ffffff;
-  overflow: hidden;
-  max-width: 400px;
-  margin: 20px auto;
-  font-size: 80%;
-  border: solid 1px #eeeeee;
+.toukouInput {
+  color: palegreen;
 }
 
-.twitter__container a {
-  color: #58aeed;
-} */
+.title {
+  /* padding: 0.5em 1em;
+  margin: 2em 0;
+  font-weight: bold; */
+  border: solid 1px #eeeeee;
+}
+.send {
+  border: solid 1px #eeeeee;
+}
 
 /* タイトル部分 */
 .twitter__title {
@@ -234,6 +205,7 @@ export default {
   margin-bottom: 5px;
   border-bottom: solid 1px #eeeeee;
   overflow: hidden;
+  border: solid 1px #eeeeee;
 }
 
 .twitter__block:last-child {
@@ -306,8 +278,16 @@ export default {
   color: #8a9aa4;
   border: 0px;
 }
+.twitter-heart {
+  width: 14px;
+  height: 14px;
+  display: block;
+  padding-left: 20px;
+  width: 20%;
+  float: left;
+  color: #8a9aa4;
+}
 
-/* @import url(https://fonts.googleapis.com/css?family=Indie+Flower); */
 body {
   margin: 0;
   padding: 0;
@@ -330,6 +310,7 @@ body {
   width: 2px;
   background: rgba(255, 0, 0, 0.4);
 } */
+
 .lines {
   margin-top: 45px;
   height: calc(100% - 35px);
@@ -351,24 +332,7 @@ body {
   overflow: hidden;
   outline: none;
 }
-/* .holes {
 
-  left: 10px;
-  height: 25px;
-  width: 25px;
-  background: lightgoldenrodyellow;
-  border-radius: 50%;
-  box-shadow: inset 0px 0px 2px 0px #888;
-}
-.hole-top {
-  top: 10%;
-}
-.hole-middle {
-  top: 50%;
-}
-.hole-bottom {
-  bottom: 1000%;
-} */
 .ma {
   background-color: palegreen;
   width: 100%;
@@ -376,5 +340,23 @@ body {
 .container {
   margin: 0;
   padding: 0;
+}
+.btn--orange,
+button.btn--orange {
+  color: #fff;
+  background-color: palegreen;
+  display: block;
+  padding-left: 10px;
+  width: 20%;
+  float: left;
+}
+.btn--orange:hover,
+button.btn--orange:hover {
+  color: #fff;
+  background: paleturquoise;
+}
+
+button.btn--radius {
+  border-radius: 100vh;
 }
 </style>

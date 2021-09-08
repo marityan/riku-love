@@ -4,9 +4,9 @@
     |
     <div><router-link to="/signup">Signup</router-link></div>
     |
-    <div><router-link to="scroll">Scroll</router-link></div>
+    <div><router-link to="/scroll">Scroll</router-link></div>
     |
-    <div><router-link to="comment">Comment</router-link></div>
+    <div><router-link to="/sample">sample</router-link></div>
     <router-view />
   </div>
 </template>
