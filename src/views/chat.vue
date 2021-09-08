@@ -110,7 +110,7 @@ export default {
           .push(
             {
               message: this.input,
-              name: this.user.displayName,
+              name: this.user.uid,
               image: this.user.photoURL,
             },
             () => {
@@ -129,10 +129,10 @@ export default {
   box-sizing: border-box;
 }
 .header {
-  background: #3ab383;
+  background: palegreen;
   margin-bottom: 1em;
   padding: 0.4em 0.8em;
-  color: #fff;
+  color: snow;
 }
 .content {
   margin: 0 auto;
