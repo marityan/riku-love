@@ -1,5 +1,5 @@
 <template>
-  <div class="container" id="app" v-cloak>
+  <div class="container" v-cloak>
     <form v-on:submit.prevent class="comment">
       <img src="../images/icon.png" />
       <input type="textarea" v-model="comment" class="comment_textarea" />
@@ -161,11 +161,14 @@ export default {
 </script>
 <style scoped>
 .comment {
-  width: 700px;
+  width: 100%;
+  height: 100%;
 }
 
 .comment_container {
   padding: 0;
+  width: 100%;
+  height: 100%;
   background: #ffffff;
   overflow: hidden;
   margin: 20px auto;

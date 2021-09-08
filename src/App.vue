@@ -1,28 +1,25 @@
 <template>
-  <div>
+  <div class="main">
     <div><router-link to="/signin">Signin</router-link></div>
     <div><router-link to="/signup">Signup</router-link></div>
     <div><router-link to="/scroll">Scroll</router-link></div>
     <div><router-link to="/chat">Chat</router-link></div>
-
     <router-view />
   </div>
 </template>
 
 <script>
-//import firebase from "firebase"
 export default {
-  methods: {
-    // signIn() {
-    //   const provider = new firebase.auth.GoogleAuthProvider()
-    //   firebase.auth().signInWithRedirect(provider)
-    // },
-  },
+  methods: {},
 }
 </script>
 
 <style>
-#app {
+.main {
+  width: 100%;
+  height: auto;
+}
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -43,5 +40,5 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>
