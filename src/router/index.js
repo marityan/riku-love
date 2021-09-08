@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
-import Home from "../views/Home.vue"
+import Signin from "@/views/Signin.vue"
+import AfterSignIn from "@/views/AfterSignIn.vue"
 import firebase from "firebase"
 
 Vue.use(VueRouter)
@@ -8,29 +9,18 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  },
-  {
-    path: "/signup",
-    name: "Signup",
-    component: () =>
-      import(/* webpackChunkName: "signup" */ "../views/Signup.vue"),
+    redirect: "/signin",
+    component: Signin,
   },
   {
     path: "/signin",
     name: "Signin",
-    component: () =>
-      import(/* webpackChunkName: "signin" */ "../views/Signin.vue"),
+    component: Signin,
+  },
+  {
+    path: "/afterSignIn",
+    name: "AfterSignIn",
+    component: AfterSignIn,
   },
   {
     path: "/scroll",
@@ -59,16 +49,33 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-  if (requiresAuth) {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        next()
-      } else {
-        next({ name: "Signin" })
+const isSignedIn = async () => {
+  // Promise を使って、onAuthStateChanged が完了するまで待つ
+  return await new Promise((resolve, reject) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          unsubscribe()
+          resolve(true)
+        } else {
+          unsubscribe()
+          resolve(false)
+        }
+      },
+      (error) => {
+        unsubscribe()
+        reject(error)
       }
-    })
+    )
+  })
+}
+
+// Vue Router のグローバルガードで、ログインしてない場合は、Signinにしか行けなくする。
+
+router.beforeEach(async (to, from, next) => {
+  const auth = await isSignedIn()
+  if (to.name !== "signin" && !auth) {
+    next("/signin")
   } else {
     next()
   }
