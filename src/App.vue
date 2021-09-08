@@ -1,11 +1,21 @@
 <template>
-
   <div>
     
-    <div><router-link to="/signin">Signin</router-link></div>
-    <div><router-link to="/signup">Signup</router-link></div>
-    <div><router-link to="timeline">TimeLine</router-link></div>
-    <div><router-link to="scroll">Scroll</router-link></div>
+    <header id="header">
+      <nav id="header-nav">
+        
+      <ul>
+        <div><router-link to="/signin">Signin</router-link></div>
+        <div><router-link to="/signup">Signup</router-link></div>
+        <div><router-link to="timeline">TimeLine</router-link></div>
+        <div><router-link to="scroll">Scroll</router-link></div>
+        <!-- <router-link tag="li" id="home-nav" to="/" exact><a>ホーム</a></router-link>
+        <router-link tag="li" id="game-nav" to="/game"><a>ゲーム</a></router-link>
+        <router-link tag="li" id="info-nav" to="/info"><a>情報</a></router-link> -->
+        <!-- <router-link tag="li" id="gift-nav" to="/gift"><a>お土産</a></router-link> -->
+      </ul>
+      </nav>
+    </header>
 
     <router-view />
   </div>
@@ -14,12 +24,7 @@
 <script>
 //import firebase from "firebase"
 export default {
-  methods: {
-    // signIn() {
-    //   const provider = new firebase.auth.GoogleAuthProvider()
-    //   firebase.auth().signInWithRedirect(provider)
-    // },
-  },
+  methods: {},
 }
 </script>
 

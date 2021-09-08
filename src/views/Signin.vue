@@ -1,38 +1,41 @@
 <template>
-  <div class="container1" id="container1">
-    <div class="form-container sign-in-container">
-      <form action="#">
-        <!-- google認証ボタン -->
+  <div>
+    
+    <div class="container1" id="container1">
+      <div class="form-container sign-in-container">
+        <form action="#">
+          <!-- google認証ボタン -->
 
-        <button
-          @click="googleSignin"
-          class="btn btn-outline-dark"
-          href="/users/googleauth"
-          role="button"
-          style="text-transform:none"
-        >
-          <img
-            width="20px"
-            style="margin-bottom:3px; margin-right:5px"
-            alt="Google sign-in"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-          />
-          Login with Google
-        </button>
-      </form>
-    </div>
-    <div class="overlay-container">
-      <div class="overlay">
-        <div class="overlay-panel overlay-right">
-          <h1>###へ<br />ようこそ！</h1>
-          <p>
-            ここは多くの就活生がお互いに<br />エントリーシートのFB・添削を行います😉
-          </p>
+          <button
+            @click="googleSignin"
+            class="btn btn-outline-dark"
+            href="/users/googleauth"
+            role="button"
+            style="text-transform:none"
+          >
+            <img
+              width="20px"
+              style="margin-bottom:3px; margin-right:5px"
+              alt="Google sign-in"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+            />
+            Login with Google
+          </button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-right">
+            <h1>###へ<br />ようこそ！</h1>
+            <p>
+              ここは多くの就活生がお互いに<br />エントリーシートのFB・添削を行います😉
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <footer>まりちゃん</footer>
+      <footer>まりちゃん</footer>
+    </div>
   </div>
 </template>
 
