@@ -1,12 +1,21 @@
 <template>
   <section class="container">
     <div>
-      <h1 class="title">
-        ESタイムライン
-      </h1>
-
-      <div class="list">
-        <div class="item" v-for="(item, index) in this.esTimeline" :key="index">
+      <div class="title">
+        <h2>
+          ホーム
+        </h2>
+      </div>
+      <div class="send">
+        <textarea class="toukouInput" id="ESContent" v-model="text">
+ESを記入</textarea
+        >
+        <button class="btn btn--orange btn--radius" v-on:click="toukou">
+          投稿する
+        </button>
+      </div>
+      <!-- <div class="list">
+        <div class="item" v-for="(item, index) in this.news" :key="index">
           <div>{{ index + item.text }}</div>
           <button v-on:click="commentFunction">コメントをする</button>
         </div>
@@ -22,85 +31,109 @@
         <span slot="no-more">-----検索結果は以上です-----</span>
         // 結果が存在しない場合下記が表示される
         <span slot="no-results">-----検索結果はありません-----</span>
-      </infinite-loading>
-      <!-- Twitter -->
-      <!-- <div class="twitter__container">
-        
-        <div class="twitter__title">
-          <span class="twitter-logo"></span>
-        </div>
-        
-        <div class="twitter__contents"> -->
+      </infinite-loading> -->
 
-      <div
-        class="twitter__block"
-        v-for="(item, index) in this.esTimeline"
-        :key="index"
-      >
+      <!-- Twitter -->
+
+      <div class="twitter__block" v-for="item in esTimeline" :key="item.id">
         <figure>
           <img src="../images/icon.png" />
         </figure>
         <div class="twitter__block-text">
           <div class="name">
-            名前<span class="name_reply"> @{{ item.userId }} </span>
+            <span class="name_reply"> @{{ item.userId }} </span>
           </div>
           <div class="date">1時間前</div>
-          <div class="text">
-            {{ item.text }}
+          <div class="paper">
+            <div class="lines">
+              <div class="text" contenteditable spellcheck="false">
+                {{ item.text }}
+              </div>
+            </div>
           </div>
           <div class="twitter__icon" for="com">
-            <button class="twitter-heart" id="com">コメントする</button>
+            <router-link :to="{ name: 'comment', params: { docId: item.id } }">
+              <button class="twitter-heart" id="com">
+                コメントする
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
-      <!-- 
-      </div> -->
     </div>
   </section>
 </template>
 
 <script>
 import firebase from "firebase"
-import InfiniteLoading from "vue-infinite-loading"
+// import InfiniteLoading from "vue-infinite-loading"
 
 export default {
   components: {
-    InfiniteLoading,
+    // InfiniteLoading,
   },
   data() {
     return {
+      subscribe: null,
       esTimeline: [],
-      news: [],
+      // news: [],
+      text: "",
+      // id_last: "0",
     }
   },
   created() {
-    firebase
+    const ref = firebase
       .firestore()
       .collection("timelineData")
-      .get()
-      .then((snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          this.esTimeline.push({
-            id: doc.id,
-            ...doc.data(),
-          })
+      .orderBy("createdAt", "desc")
+
+    this.subscribe = ref.onSnapshot((snapshot) => {
+      let esTimeline = []
+      snapshot.forEach((doc) => {
+        esTimeline.push({
+          id: doc.id,
+          ...doc.data(),
         })
       })
+      this.esTimeline = esTimeline
+    })
   },
+
   methods: {
     /*
      * infiniteLoad
      * 自動実行されるmethod
      */
-    infiniteLoad() {
-      // itemの生成
-      this.news = this.esTimeline
-      this.$refs.infiniteLoading.stateChanger.loaded()
-      if (this.news.length == this.esTimeline.length) {
-        this.$refs.infiniteLoading.stateChanger.complete()
-      }
+    // infiniteLoad() {
+    //   for (let i = 0; i < 20; i++) {
+    //     this.news.push(this.esTimeline[i])
+    //   }
+    //   this.$refs.infiniteLoading.stateChanger.loaded()
+    //   if (this.news.length == 30) {
+    //     this.$refs.infiniteLoading.stateChanger.complete()
+    //   }
+    // },
+    toukou: function() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          firebase
+            .firestore()
+            .collection("timelineData")
+            .add({
+              userId: user.uid,
+              text: this.text,
+              wordLength: this.text.length,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            })
+          alert("投稿完了")
+          this.text = ""
+        } else {
+          // User is signed out
+          alert("投稿することができません。")
+          console.log("Error")
+        }
+      })
     },
-    commentFunction() {},
   },
 }
 </script>
@@ -120,19 +153,19 @@ export default {
   position: relative;
 }
 
-/* .twitter__container {
-  padding: 0;
-  background: #ffffff;
-  overflow: hidden;
-  max-width: 400px;
-  margin: 20px auto;
-  font-size: 80%;
-  border: solid 1px #eeeeee;
+.toukouInput {
+  color: palegreen;
 }
 
-.twitter__container a {
-  color: #58aeed;
-} */
+.title {
+  /* padding: 0.5em 1em;
+  margin: 2em 0;
+  font-weight: bold; */
+  border: solid 1px #eeeeee;
+}
+.send {
+  border: solid 1px #eeeeee;
+}
 
 /* タイトル部分 */
 .twitter__title {
@@ -172,6 +205,7 @@ export default {
   margin-bottom: 5px;
   border-bottom: solid 1px #eeeeee;
   overflow: hidden;
+  border: solid 1px #eeeeee;
 }
 
 .twitter__block:last-child {
@@ -216,7 +250,7 @@ export default {
   color: #8a9aa4;
 }
 /* 本文 */
-.twitter__block-text .text {
+.twitter__block-text {
   margin: 5px 0;
 }
 /* 画像を貼る場合 */
@@ -243,5 +277,86 @@ export default {
   float: left;
   color: #8a9aa4;
   border: 0px;
+}
+.twitter-heart {
+  width: 14px;
+  height: 14px;
+  display: block;
+  padding-left: 20px;
+  width: 20%;
+  float: left;
+  color: #8a9aa4;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: lightgoldenrodyellow;
+}
+.paper {
+  height: 550px;
+  width: 450px;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 45px 25px;
+  left: 50%;
+  top: 50%;
+  box-shadow: 0px 0px 5px 0px #888;
+}
+/* .paper::before {
+  content: "";
+  position: absolute;
+  left: 45px;
+  height: 100%;
+  width: 2px;
+  background: rgba(255, 0, 0, 0.4);
+} */
+
+.lines {
+  margin-top: 45px;
+  height: calc(100% - 35px);
+  width: 100%;
+  background-image: repeating-linear-gradient(
+    white 0px,
+    white 24px,
+    steelblue 25px
+  );
+}
+.text {
+  position: absolute;
+  top: 80px;
+  left: 55px;
+  bottom: 30px;
+  right: 30px;
+  line-height: 25px;
+  font-family: "Indie Flower";
+  overflow: hidden;
+  outline: none;
+}
+
+.ma {
+  background-color: palegreen;
+  width: 100%;
+}
+.container {
+  margin: 0;
+  padding: 0;
+}
+.btn--orange,
+button.btn--orange {
+  color: #fff;
+  background-color: palegreen;
+  display: block;
+  padding-left: 10px;
+  width: 20%;
+  float: left;
+}
+.btn--orange:hover,
+button.btn--orange:hover {
+  color: #fff;
+  background: paleturquoise;
+}
+
+button.btn--radius {
+  border-radius: 100vh;
 }
 </style>
