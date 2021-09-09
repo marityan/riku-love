@@ -43,7 +43,9 @@ import firebase from "firebase"
 
 export default {
   data() {
-    return {}
+    return {
+      uidArray: [],
+    }
   },
   methods: {
     googleSignin() {
@@ -56,13 +58,33 @@ export default {
           this.$router.push("/scroll")
         })
       // userコレクションにgoogleユーザー情報を追加
-      firebase
-        .firestore()
-        .collection("user")
-        .add({ GoogleData: this.$auth.currentUser })
-
-      console.log(this.$auth.currentUser)
+      for (const uid of this.uidArray) {
+        if (uid === this.$auth.currentUser.uid) {
+          alert("サインインしました。")
+        } else {
+          alert("新規登録しました。")
+          firebase
+            .firestore()
+            .collection("users")
+            .add({ GoogleData: this.$auth.currentUser })
+        }
+      }
     },
+  },
+  created() {
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then((query) => {
+        query.forEach((doc) => {
+          const d = doc.data()
+          this.uidArray.push(d.GoogleData.uid)
+        })
+      })
+      .catch((error) => {
+        console.log(`データの取得に失敗しました (${error})`)
+      })
   },
 }
 </script>
