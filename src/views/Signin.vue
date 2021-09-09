@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       uidArray: [],
+      sign: true,
     }
   },
   methods: {
@@ -60,14 +61,16 @@ export default {
       // userコレクションにgoogleユーザー情報を追加
       for (const uid of this.uidArray) {
         if (uid === this.$auth.currentUser.uid) {
+          this.sign = false
           alert("サインインしました。")
-        } else {
-          alert("新規登録しました。")
-          firebase
-            .firestore()
-            .collection("users")
-            .add({ GoogleData: this.$auth.currentUser })
         }
+      }
+      if (this.sign) {
+        alert("新規登録しました。")
+        firebase
+          .firestore()
+          .collection("users")
+          .add({ GoogleData: this.$auth.currentUser })
       }
     },
   },
