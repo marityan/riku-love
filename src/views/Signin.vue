@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <div class="container1" id="container1">
       <div class="form-container sign-in-container">
         <form action="#">
@@ -49,12 +48,20 @@ export default {
   methods: {
     googleSignin() {
       const provider = new firebase.auth.GoogleAuthProvider()
+      // ログイン認証
       firebase
         .auth()
         .signInWithPopup(provider)
         .then(() => {
           this.$router.push("/scroll")
         })
+      // userコレクションにgoogleユーザー情報を追加
+      firebase
+        .firestore()
+        .collection("user")
+        .add({ GoogleData: this.$auth.currentUser })
+
+      console.log(this.$auth.currentUser)
     },
   },
 }
