@@ -11,6 +11,7 @@
     "bootstrap-vue": "^2.21.2",
     "core-js": "^3.6.5",
     "firebase": "^8.10.0",
+    "mdb-vue-ui-kit": "^1.2.0",
     "vue": "^2.6.11",
     "vue-infinite-loading": "^2.4.5",
     "vue-nl2br": "^0.1.2",
