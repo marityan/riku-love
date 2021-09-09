@@ -41,7 +41,6 @@
 
 <script>
 import firebase from "firebase"
-// import AfterSignIn from
 
 export default {
   data() {
@@ -61,7 +60,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
 
 * {
@@ -109,9 +108,7 @@ a {
 
 button {
   border-radius: 20px;
-  /* border: 1px solid #fc4221;
-  background-color: #1609d6; */
-  /* color: #ffffff; */
+
   font-size: 12px;
   font-weight: bold;
   padding: 12px 45px;
