@@ -30,7 +30,7 @@ export default {
         .signOut()
         .then(() => {
           console.log("ログアウトしました")
-          this.$route.push("/")
+          this.$router.push("/")
         })
         .catch((error) => {
           console.log(`ログアウト時にエラーが発生しました (${error})`)
