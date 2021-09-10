@@ -18,6 +18,7 @@
           <li>
             <a href="#"><router-link to="/mypage">Mypage</router-link></a>
           </li>
+        
         </ul>
       </nav>
     </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>マイページ</h1>
-    <UserProfile />
+
     <div
       class="row d-flex flex-column align-items-center justify-content-center"
     >
@@ -12,6 +12,7 @@
         </button>
       </div>
     </div>
+    <UserProfile />
   </div>
 </template>
 
@@ -29,16 +30,16 @@ export default {
         .signOut()
         .then(() => {
           console.log("ログアウトしました")
-          this.$router.push("/")
+          this.$route.push("/")
         })
         .catch((error) => {
           console.log(`ログアウト時にエラーが発生しました (${error})`)
         })
     },
-    computed: {
-      user() {
-        return this.$auth.currentUser
-      },
+  },
+  computed: {
+    user() {
+      return this.$auth.currentUser
     },
   },
 }

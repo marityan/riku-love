@@ -2,6 +2,8 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import Signin from "@/views/Signin.vue"
 import Mypage from "@/views/Mypage.vue"
+import MypageSample from "@/views/MypageSample.vue"
+
 import firebase from "firebase"
 
 Vue.use(VueRouter)
@@ -21,6 +23,11 @@ const routes = [
     path: "/mypage",
     name: "Mypage",
     component: Mypage,
+  },
+  {
+    path: "/mypagesample",
+    name: "MypageSample",
+    component: MypageSample,
   },
   {
     path: "/scroll",
