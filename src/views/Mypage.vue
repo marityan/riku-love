@@ -8,7 +8,7 @@
       <div class="col-md-2">
         <!-- ここからGoogle認証 -->
         <button @click="logOut" class="btn btn-block bg-danger text-white my-3">
-          ログアウト
+          <router-link to="/">ログアウト</router-link>
         </button>
       </div>
     </div>
@@ -30,7 +30,7 @@ export default {
         .signOut()
         .then(() => {
           console.log("ログアウトしました")
-          this.$router.push("/")
+          //   this.$router.push("/")
         })
         .catch((error) => {
           console.log(`ログアウト時にエラーが発生しました (${error})`)
