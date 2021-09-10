@@ -1,7 +1,7 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 import Signin from "@/views/Signin.vue"
-import AfterSignIn from "@/views/AfterSignIn.vue"
+import Mypage from "@/views/Mypage.vue"
 import firebase from "firebase"
 
 Vue.use(VueRouter)
@@ -18,9 +18,9 @@ const routes = [
     component: Signin,
   },
   {
-    path: "/afterSignIn",
-    name: "AfterSignIn",
-    component: AfterSignIn,
+    path: "/mypage",
+    name: "Mypage",
+    component: Mypage,
   },
   {
     path: "/scroll",
