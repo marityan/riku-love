@@ -110,7 +110,7 @@ export default {
           .push(
             {
               message: this.input,
-              name: this.user.uid,
+              name: this.user.displayName,
               image: this.user.photoURL,
             },
             () => {
