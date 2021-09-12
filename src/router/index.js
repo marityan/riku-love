@@ -2,7 +2,7 @@ import Vue from "vue"
 import VueRouter from "vue-router"
 import Signin from "@/views/Signin.vue"
 import AfterSignIn from "@/views/AfterSignIn.vue"
-import firebase from "firebase"
+// import firebase from "firebase"
 
 Vue.use(VueRouter)
 
@@ -55,36 +55,36 @@ const router = new VueRouter({
   routes,
 })
 
-const isSignedIn = async () => {
-  // Promise を使って、onAuthStateChanged が完了するまで待つ
-  return await new Promise((resolve, reject) => {
-    const unsubscribe = firebase.auth().onAuthStateChanged(
-      (user) => {
-        if (user) {
-          unsubscribe()
-          resolve(true)
-        } else {
-          unsubscribe()
-          resolve(false)
-        }
-      },
-      (error) => {
-        unsubscribe()
-        reject(error)
-      }
-    )
-  })
-}
+// const isSignedIn = async () => {
+//   // Promise を使って、onAuthStateChanged が完了するまで待つ
+//   return await new Promise((resolve, reject) => {
+//     const unsubscribe = firebase.auth().onAuthStateChanged(
+//       (user) => {
+//         if (user) {
+//           unsubscribe()
+//           resolve(true)
+//         } else {
+//           unsubscribe()
+//           resolve(false)
+//         }
+//       },
+//       (error) => {
+//         unsubscribe()
+//         reject(error)
+//       }
+//     )
+//   })
+// }
 
-// Vue Router のグローバルガードで、ログインしてない場合は、Signinにしか行けなくする。
+// // Vue Router のグローバルガードで、ログインしてない場合は、Signinにしか行けなくする。
 
-router.beforeEach(async (to, from, next) => {
-  const auth = await isSignedIn()
-  if (to.name !== "signin" && !auth) {
-    next("/signin")
-  } else {
-    next()
-  }
-})
+// router.beforeEach(async (to, from, next) => {
+//   const auth = await isSignedIn()
+//   if (to.name !== "signin" && !auth) {
+//     next("/signin")
+//   } else {
+//     next()
+//   }
+// })
 
 export default router
