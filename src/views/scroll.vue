@@ -322,7 +322,6 @@ body {
   );
 }
 .text {
-  position: absolute;
   top: 80px;
   left: 55px;
   bottom: 30px;
